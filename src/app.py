@@ -16,7 +16,7 @@ ah = utils.APIBMEHandler()
 
 app.layout = html.Div(
     children=[
-        html.H1('MIAX Data EXPLORER'),
+        html.H1('MIAX Data Explorer'),
         html.P('mIAx API'),
         dcc.Dropdown(
             id='menu-index',

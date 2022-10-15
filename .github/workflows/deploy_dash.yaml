@@ -51,14 +51,15 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-      # - name: Deploy to App Runner Image
-      #   id: deploy-apprunner
-      #   uses: awslabs/amazon-app-runner-deploy@main
-      #   with:
-      #     service: suma-api
-      #     image: ${{ steps.build-image.outputs.image }}
-      #     access-role-arn: arn:aws:iam::467432373215:role/service-role/AppRunnerECRAccessRole
-      #     region: eu-west-1
-      #     cpu : 1
-      #     memory : 2
-      #     wait-for-service-stability: true
+      - name: Deploy to App Runner Image
+        id: deploy-apprunner
+        uses: awslabs/amazon-app-runner-deploy@main
+        with:
+          service: dash_miax
+          image: ${{ steps.build-image.outputs.image }}
+          access-role-arn: arn:aws:iam::467432373215:role/service-role/AppRunnerECRAccessRole
+          region: eu-west-1
+          cpu : 1
+          memory : 2
+          wait-for-service-stability: true
+  
