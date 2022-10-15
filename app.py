@@ -1,8 +1,10 @@
 import dash
 from dash import dcc
 from dash import html
+from dash.dependencies import Input, Output, State
 import plotly.express as px
 import pandas as pd
+
 
 import utils
 
@@ -11,8 +13,6 @@ app = dash.Dash(__name__)
 
 ah = utils.APIBMEHandler()
 
-san_data = ah.get_close_data_ticker(market='IBEX', ticker='SAN')
-fig = px.line(san_data)
 
 app.layout = html.Div(
     children=[
@@ -29,17 +29,46 @@ app.layout = html.Div(
         ),
         dcc.Dropdown(
             id='menu-ticker',
-            options=[
-                {'label': 'SAN', 'value': 'SAN'},
-            ],
-            value='SAN'
         ),
         dcc.Graph(
             id='example-graph',
-            figure=fig
         )
     ]
 )
+
+
+
+@app.callback(
+    Output('menu-ticker', 'options'),
+    Input('menu-index', 'value')
+)
+def change_ticker_menu_options(market):
+    master = ah.get_ticker_master(market=market)
+    ticker_options = [
+        {'label': tck, 'value': tck} 
+        for tck in master.ticker
+    ]
+    return ticker_options
+
+
+@app.callback(
+    Output('menu-ticker', 'value'),
+    Input('menu-ticker', 'options'),
+)
+def select_tck(ticker_options):
+    return ticker_options[0]['value']
+
+
+@app.callback(
+    Output('example-graph', 'figure'),
+    State('menu-index', 'value'),
+    Input('menu-ticker', 'value'),
+)
+def change_figure(market, tck):
+    data = ah.get_close_data_ticker(market=market, ticker=tck)
+    fig = px.line(data)
+    return fig
+
 
 if __name__ == '__main__':
     app.run(debug=True)
