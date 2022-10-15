@@ -59,6 +59,7 @@ jobs:
           image: ${{ steps.build-image.outputs.image }}
           access-role-arn: arn:aws:iam::467432373215:role/service-role/AppRunnerECRAccessRole
           region: eu-west-1
+          port: 8080
           cpu : 1
           memory : 2
           wait-for-service-stability: true
