@@ -1,4 +1,4 @@
-name: API - Deploy to Amazon
+name: Deploy AppRunner
 
 on:
   push:
